@@ -19,6 +19,7 @@ export default function RootLayout() {
           contentStyle: {
             backgroundColor: '#0F172A',
           },
+          headerShown: false
         }}
       />
     </Provider>
