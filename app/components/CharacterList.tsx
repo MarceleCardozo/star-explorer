@@ -93,7 +93,7 @@ const CharacterList: React.FC = () => {
 
   useEffect(() => {
     loadCharacters(1, debouncedSearchQuery);
-  }, [debouncedSearchQuery]);
+  }, []);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -278,14 +278,23 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   searchButton: {
-    backgroundColor: '#3B82F6',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    backgroundColor: '#FFE81F',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    shadowColor: '#FFE81F',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   searchButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
+    color: '#000000',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   clearButton: {
     position: 'absolute',
