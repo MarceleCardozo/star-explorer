@@ -52,9 +52,6 @@ const CharacterList: React.FC = () => {
 
   const renderSearchBar = () => (
     <View>
-      <View style={styles.searchLabelContainer}>
-        <Text style={styles.searchLabel}>Filtrar personagens por nome:</Text>
-      </View>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -171,12 +168,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0F172A',
-  },
-  searchLabelContainer: {
-    paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 4,
-    backgroundColor: '#1E293B',
   },
   searchLabel: {
     color: '#FFE81F',
