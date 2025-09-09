@@ -32,7 +32,7 @@ export interface ApiResponse {
 
 const BASE_URL = 'https://swapi.tech/api';
 
-export const fetchCharacters = async (page: number = 1, searchQuery: string = '', retryCount: number = 0, maxRetries: number = 2): Promise<ApiResponse> => {
+export const fetchCharacters = async (page: number = 1, searchQuery: string = ''): Promise<ApiResponse> => {
   try {
     let url = `${BASE_URL}/people`;
     if (page > 1) {
