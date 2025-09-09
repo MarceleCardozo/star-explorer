@@ -201,7 +201,6 @@ const CharacterList: React.FC = () => {
       {pageLoading ? (
         <View style={styles.pageLoadingContainer}>
           <ActivityIndicator size="large" color="#FFE81F" />
-          <Text style={styles.loadingText}>Carregando página {currentPage + 1}...</Text>
         </View>
       ) : (
         <FlatList
