@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757450974801" clover="3.2.0">
-  <project timestamp="1757450974801" name="All files">
+<coverage generated="1757451314142" clover="3.2.0">
+  <project timestamp="1757451314142" name="All files">
     <metrics statements="119" coveredstatements="47" conditionals="75" coveredconditionals="19" methods="36" coveredmethods="9" elements="230" coveredelements="75" complexity="0" loc="119" ncloc="119" packages="8" files="13" classes="13"/>
     <package name="star-explorer">
       <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
