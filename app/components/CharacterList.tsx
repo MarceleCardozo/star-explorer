@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Character, fetchCharacters, getPageNumberFromUrl } from '../services/api';
 import CharacterCard from './CharacterCard';
 
@@ -49,18 +49,20 @@ const CharacterList: React.FC = () => {
   const [prevPage, setPrevPage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [usingFallbackData, setUsingFallbackData] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   const retryFetch = (page: number) => {
-    loadCharacters(page);
+    loadCharacters(page, debouncedSearchQuery);
   };
 
-  const loadCharacters = async (page: number = 1, retryCount: number = 0) => {
+  const loadCharacters = async (page: number = 1, query: string = '', retryCount: number = 0) => {
     try {
       setLoading(true);
       setError(null);
       setUsingFallbackData(false);
       
-      const data = await fetchCharacters(page);
+      const data = await fetchCharacters(page, query);
       
       if (data && data.results) {
         setCharacters(data.results);
@@ -83,22 +85,66 @@ const CharacterList: React.FC = () => {
   };
 
   useEffect(() => {
-    loadCharacters();
-  }, []);
+    loadCharacters(1, debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleNextPage = () => {
     if (nextPage) {
       const nextPageNumber = getPageNumberFromUrl(nextPage);
-      loadCharacters(nextPageNumber);
+      loadCharacters(nextPageNumber, debouncedSearchQuery);
     }
   };
 
   const handlePrevPage = () => {
     if (prevPage) {
       const prevPageNumber = getPageNumberFromUrl(prevPage);
-      loadCharacters(prevPageNumber);
+      loadCharacters(prevPageNumber, debouncedSearchQuery);
     }
   };
+  
+  const handleSearch = () => {
+    setDebouncedSearchQuery(searchQuery);
+  };
+  
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
+  };
+
+  const renderSearchBar = () => (
+    <View>
+      <View style={styles.searchLabelContainer}>
+        <Text style={styles.searchLabel}>Filtrar personagens por nome:</Text>
+      </View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar personagem por nome..."
+          placeholderTextColor="#94A3B8"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSearch}
+          returnKeyType="search"
+        />
+        {searchQuery ? (
+          <TouchableOpacity style={styles.clearButton} onPress={handleClearSearch}>
+            <Text style={styles.clearButtonText}>✕</Text>
+          </TouchableOpacity>
+        ) : null}
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Text style={styles.searchButtonText}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   if (loading && characters.length === 0) {
     return (
@@ -143,6 +189,7 @@ const CharacterList: React.FC = () => {
   return (
     <View style={styles.container}>
       <OfflineBanner />
+      {renderSearchBar()}
       
       <FlatList
         data={characters}
@@ -187,6 +234,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0F172A',
+  },
+  searchLabelContainer: {
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
+    backgroundColor: '#1E293B',
+  },
+  searchLabel: {
+    color: '#FFE81F',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    padding: 12,
+    backgroundColor: '#1E293B',
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    backgroundColor: '#0F172A',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    color: '#E5E7EB',
+    marginRight: 8,
+  },
+  searchButton: {
+    backgroundColor: '#3B82F6',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  searchButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  clearButton: {
+    position: 'absolute',
+    right: 70,
+    top: 22,
+    zIndex: 1,
+  },
+  clearButtonText: {
+    color: '#94A3B8',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   listContent: {
     paddingVertical: 16,
