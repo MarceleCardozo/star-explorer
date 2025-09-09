@@ -43,19 +43,14 @@ export const fetchCharacters = async (page: number = 1, searchQuery: string = ''
     }
     
     const response = await axios.get(url);
-    
-    console.log('Status da resposta:', response.data);
-    
-    // Adaptar a resposta da API SWAPI.tech para o formato esperado pelo componente
+
     const swapiData: SwapiResponse = response.data;
     
-    // Converter para o formato ApiResponse
     const apiResponse: ApiResponse = {
       count: swapiData.total_records,
       next: swapiData.next,
       previous: swapiData.previous,
       results: await Promise.all(swapiData.results.map(async (character) => {
-        // Para cada personagem, precisamos fazer uma requisição adicional para obter os detalhes
         try {
           const detailResponse = await axios.get(`${BASE_URL}/people/${character.uid}`);
           const characterDetail = detailResponse.data.result.properties;
