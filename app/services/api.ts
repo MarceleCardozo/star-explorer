@@ -15,23 +15,22 @@ export interface ApiResponse {
   results: Character[];
 }
 
-const BASE_URL = 'https://swapi.dev/api';
+const BASE_URL = 'https://swapi.tech/api';
 
 export const fetchCharacters = async (page: number = 1, searchQuery: string = '', retryCount: number = 0, maxRetries: number = 2): Promise<ApiResponse> => {
   try {
-    console.log('Buscando página:', page, 'Tentativa:', retryCount + 1);
-    
     let url = `${BASE_URL}/people/?page=${page}`;
     if (searchQuery) {
       url = `${BASE_URL}/people/?search=${encodeURIComponent(searchQuery)}&page=${page}`;
     }
     
     const response = await axios.get(url);
+
+    console.log(response, 'response')
     
-    console.log('Status da resposta:', response);
+    console.log('Status da resposta:', response.data);
     
     const data: ApiResponse = response.data;
-    console.log('Dados recebidos:', data.count, 'personagens');
     return data;
   } catch (error: any) {
     console.error('Erro ao buscar personagens:', JSON.stringify(error));
