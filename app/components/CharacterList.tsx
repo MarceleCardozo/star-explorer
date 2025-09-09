@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSearchQuery, fetchCharactersThunk, setSearchQuery } from '../redux/slices/charactersSlice';
-import { getPageNumberFromUrl } from '../services/api';
+import { Character, getPageNumberFromUrl } from '../services/api';
 import CharacterCard from './CharacterCard';
+import CharacterModal from './CharacterModal';
 
 const CharacterList: React.FC = () => {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useAppDispatch();
   const { 
     characters, 
@@ -133,12 +136,22 @@ const CharacterList: React.FC = () => {
               height={item.height}
               mass={item.mass}
               birthYear={item.birth_year}
+              onPress={() => {
+                setSelectedCharacter(item);
+                setModalVisible(true);
+              }}
             />
           )}
           contentContainerStyle={styles.listContent}
         />
       )}
       
+      <CharacterModal
+        isVisible={modalVisible}
+        character={selectedCharacter}
+        onClose={() => setModalVisible(false)}
+      />
+
       <View style={styles.paginationContainer}>
         <TouchableOpacity 
           style={[styles.paginationButton, (!prevPage || usingFallbackData || pageLoading) && styles.disabledButton]} 
