@@ -44,6 +44,7 @@ const FALLBACK_DATA: Character[] = [
 const CharacterList: React.FC = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false); // Estado para controlar o carregamento durante a troca de página
   const [error, setError] = useState<string | null>(null);
   const [nextPage, setNextPage] = useState<string | null>(null);
   const [prevPage, setPrevPage] = useState<string | null>(null);
@@ -58,7 +59,12 @@ const CharacterList: React.FC = () => {
 
   const loadCharacters = async (page: number = 1, query: string = '', retryCount: number = 0) => {
     try {
-      setLoading(true);
+      if (characters.length === 0) {
+        setLoading(true);
+      } else {
+        setPageLoading(true);
+      }
+      
       setError(null);
       setUsingFallbackData(false);
       
@@ -81,6 +87,7 @@ const CharacterList: React.FC = () => {
       setPrevPage(null);
     } finally {
       setLoading(false);
+      setPageLoading(false);
     }
   };
 
@@ -191,25 +198,32 @@ const CharacterList: React.FC = () => {
       <OfflineBanner />
       {renderSearchBar()}
       
-      <FlatList
-        data={characters}
-        keyExtractor={(item) => item.url}
-        renderItem={({ item }) => (
-          <CharacterCard
-            name={item.name}
-            height={item.height}
-            mass={item.mass}
-            birthYear={item.birth_year}
-          />
-        )}
-        contentContainerStyle={styles.listContent}
-      />
+      {pageLoading ? (
+        <View style={styles.pageLoadingContainer}>
+          <ActivityIndicator size="large" color="#FFE81F" />
+          <Text style={styles.loadingText}>Carregando página {currentPage + 1}...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={characters}
+          keyExtractor={(item) => item.url}
+          renderItem={({ item }) => (
+            <CharacterCard
+              name={item.name}
+              height={item.height}
+              mass={item.mass}
+              birthYear={item.birth_year}
+            />
+          )}
+          contentContainerStyle={styles.listContent}
+        />
+      )}
       
       <View style={styles.paginationContainer}>
         <TouchableOpacity 
-          style={[styles.paginationButton, (!prevPage || usingFallbackData) && styles.disabledButton]} 
+          style={[styles.paginationButton, (!prevPage || usingFallbackData || pageLoading) && styles.disabledButton]} 
           onPress={handlePrevPage}
-          disabled={!prevPage || usingFallbackData}
+          disabled={!prevPage || usingFallbackData || pageLoading}
         >
           <Text style={styles.paginationButtonText}>Anterior</Text>
         </TouchableOpacity>
@@ -219,9 +233,9 @@ const CharacterList: React.FC = () => {
         </Text>
         
         <TouchableOpacity 
-          style={[styles.paginationButton, (!nextPage || usingFallbackData) && styles.disabledButton]} 
+          style={[styles.paginationButton, (!nextPage || usingFallbackData || pageLoading) && styles.disabledButton]} 
           onPress={handleNextPage}
-          disabled={!nextPage || usingFallbackData}
+          disabled={!nextPage || usingFallbackData || pageLoading}
         >
           <Text style={styles.paginationButtonText}>Próxima</Text>
         </TouchableOpacity>
@@ -288,6 +302,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0F172A',
+    padding: 20,
+  },
+  pageLoadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
