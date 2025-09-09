@@ -17,11 +17,16 @@ export interface ApiResponse {
 
 const BASE_URL = 'https://swapi.dev/api';
 
-export const fetchCharacters = async (page: number = 1, retryCount: number = 0, maxRetries: number = 2): Promise<ApiResponse> => {
+export const fetchCharacters = async (page: number = 1, searchQuery: string = '', retryCount: number = 0, maxRetries: number = 2): Promise<ApiResponse> => {
   try {
     console.log('Buscando página:', page, 'Tentativa:', retryCount + 1);
     
-    const response = await axios.get(`${BASE_URL}/people`);
+    let url = `${BASE_URL}/people/?page=${page}`;
+    if (searchQuery) {
+      url = `${BASE_URL}/people/?search=${encodeURIComponent(searchQuery)}&page=${page}`;
+    }
+    
+    const response = await axios.get(url);
     
     console.log('Status da resposta:', response);
     
