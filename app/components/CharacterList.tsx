@@ -1,129 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Character, fetchCharacters, getPageNumberFromUrl } from '../services/api';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { clearSearchQuery, fetchCharactersThunk, setSearchQuery } from '../redux/slices/charactersSlice';
+import { getPageNumberFromUrl } from '../services/api';
 import CharacterCard from './CharacterCard';
 
-const FALLBACK_DATA: Character[] = [
-  {
-    name: 'Luke Skywalker',
-    height: '172',
-    mass: '77',
-    birth_year: '19BBY',
-    url: 'https://swapi.dev/api/people/1/'
-  },
-  {
-    name: 'C-3PO',
-    height: '167',
-    mass: '75',
-    birth_year: '112BBY',
-    url: 'https://swapi.dev/api/people/2/'
-  },
-  {
-    name: 'R2-D2',
-    height: '96',
-    mass: '32',
-    birth_year: '33BBY',
-    url: 'https://swapi.dev/api/people/3/'
-  },
-  {
-    name: 'Darth Vader',
-    height: '202',
-    mass: '136',
-    birth_year: '41.9BBY',
-    url: 'https://swapi.dev/api/people/4/'
-  },
-  {
-    name: 'Leia Organa',
-    height: '150',
-    mass: '49',
-    birth_year: '19BBY',
-    url: 'https://swapi.dev/api/people/5/'
-  }
-];
-
 const CharacterList: React.FC = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pageLoading, setPageLoading] = useState(false); // Estado para controlar o carregamento durante a troca de página
-  const [error, setError] = useState<string | null>(null);
-  const [nextPage, setNextPage] = useState<string | null>(null);
-  const [prevPage, setPrevPage] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [usingFallbackData, setUsingFallbackData] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const dispatch = useAppDispatch();
+  const { 
+    characters, 
+    loading, 
+    pageLoading, 
+    error, 
+    nextPage, 
+    prevPage, 
+    currentPage, 
+    searchQuery 
+  } = useAppSelector(state => state.characters);
+  const usingFallbackData = error !== null && characters.length > 0;
 
   const retryFetch = (page: number) => {
-    loadCharacters(page, debouncedSearchQuery);
-  };
-
-  const loadCharacters = async (page: number = 1, query: string = '', retryCount: number = 0) => {
-    try {
-      if (characters.length === 0) {
-        setLoading(true);
-      } else {
-        setPageLoading(true);
-      }
-      
-      setError(null);
-      setUsingFallbackData(false);
-      
-      const data = await fetchCharacters(page, query);
-      
-      if (data && data.results) {
-        setCharacters(data.results);
-        setNextPage(data.next);
-        setPrevPage(data.previous);
-        setCurrentPage(page);
-      } else {
-        throw new Error('Dados inválidos recebidos da API');
-      }
-    } catch (err: any) {
-      console.error('Erro detalhado:', err);
-     
-      setCharacters(FALLBACK_DATA);
-      setUsingFallbackData(true);
-      setNextPage(null);
-      setPrevPage(null);
-    } finally {
-      setLoading(false);
-      setPageLoading(false);
-    }
+    dispatch(fetchCharactersThunk({ page, query: searchQuery }));
   };
 
   useEffect(() => {
-    loadCharacters(1, debouncedSearchQuery);
-  }, []);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+    dispatch(fetchCharactersThunk({ page: 1, query: '' }));
+  }, [dispatch]);
 
   const handleNextPage = () => {
     if (nextPage) {
       const nextPageNumber = getPageNumberFromUrl(nextPage);
-      loadCharacters(nextPageNumber, debouncedSearchQuery);
+      dispatch(fetchCharactersThunk({ page: nextPageNumber, query: searchQuery }));
     }
   };
 
   const handlePrevPage = () => {
     if (prevPage) {
       const prevPageNumber = getPageNumberFromUrl(prevPage);
-      loadCharacters(prevPageNumber, debouncedSearchQuery);
+      dispatch(fetchCharactersThunk({ page: prevPageNumber, query: searchQuery }));
     }
   };
   
   const handleSearch = () => {
-    setDebouncedSearchQuery(searchQuery);
+    dispatch(fetchCharactersThunk({ page: 1, query: searchQuery }));
   };
   
   const handleClearSearch = () => {
-    setSearchQuery('');
-    setDebouncedSearchQuery('');
+    dispatch(clearSearchQuery());
+    dispatch(fetchCharactersThunk({ page: 1, query: '' }));
   };
 
   const renderSearchBar = () => (
@@ -137,7 +61,7 @@ const CharacterList: React.FC = () => {
           placeholder="Buscar personagem por nome..."
           placeholderTextColor="#94A3B8"
           value={searchQuery}
-          onChangeText={setSearchQuery}
+          onChangeText={(text) => dispatch(setSearchQuery(text))}
           onSubmitEditing={handleSearch}
           returnKeyType="search"
         />
