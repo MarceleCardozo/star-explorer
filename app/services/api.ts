@@ -6,6 +6,10 @@ export interface Character {
   mass: string;
   birth_year: string;
   url: string;
+  gender?: string;
+  eye_color?: string;
+  hair_color?: string;
+  films?: string[];
 }
 
 export interface SwapiCharacter {
@@ -60,7 +64,11 @@ export const fetchCharacters = async (page: number = 1, searchQuery: string = ''
             height: characterDetail.height || 'Desconhecido',
             mass: characterDetail.mass || 'Desconhecido',
             birth_year: characterDetail.birth_year || 'Desconhecido',
-            url: character.url
+            url: character.url,
+            gender: characterDetail.gender || 'Desconhecido',
+            eye_color: characterDetail.eye_color || 'Desconhecido',
+            hair_color: characterDetail.hair_color || 'Desconhecido',
+            films: characterDetail.films || []
           };
         } catch (error) {
           console.error(`Erro ao buscar detalhes do personagem ${character.name}:`, error);
@@ -69,7 +77,11 @@ export const fetchCharacters = async (page: number = 1, searchQuery: string = ''
             height: 'Desconhecido',
             mass: 'Desconhecido',
             birth_year: 'Desconhecido',
-            url: character.url
+            url: character.url,
+            gender: 'Desconhecido',
+            eye_color: 'Desconhecido',
+            hair_color: 'Desconhecido',
+            films: []
           };
         }
       }))
