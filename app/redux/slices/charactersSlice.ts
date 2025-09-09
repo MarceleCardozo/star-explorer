@@ -7,35 +7,55 @@ const FALLBACK_DATA: Character[] = [
     height: '172',
     mass: '77',
     birth_year: '19BBY',
-    url: 'https://swapi.dev/api/people/1/'
+    url: 'https://swapi.dev/api/people/1/',
+    gender: 'male',
+    eye_color: 'blue',
+    hair_color: 'blond',
+    films: ['https://swapi.dev/api/films/1/', 'https://swapi.dev/api/films/2/', 'https://swapi.dev/api/films/3/']
   },
   {
     name: 'C-3PO',
     height: '167',
     mass: '75',
     birth_year: '112BBY',
-    url: 'https://swapi.dev/api/people/2/'
+    url: 'https://swapi.dev/api/people/2/',
+    gender: 'n/a',
+    eye_color: 'yellow',
+    hair_color: 'n/a',
+    films: ['https://swapi.dev/api/films/1/', 'https://swapi.dev/api/films/2/', 'https://swapi.dev/api/films/3/']
   },
   {
     name: 'R2-D2',
     height: '96',
     mass: '32',
     birth_year: '33BBY',
-    url: 'https://swapi.dev/api/people/3/'
+    url: 'https://swapi.dev/api/people/3/',
+    gender: 'n/a',
+    eye_color: 'red',
+    hair_color: 'n/a',
+    films: ['https://swapi.dev/api/films/1/', 'https://swapi.dev/api/films/2/', 'https://swapi.dev/api/films/3/']
   },
   {
     name: 'Darth Vader',
     height: '202',
     mass: '136',
     birth_year: '41.9BBY',
-    url: 'https://swapi.dev/api/people/4/'
+    url: 'https://swapi.dev/api/people/4/',
+    gender: 'male',
+    eye_color: 'yellow',
+    hair_color: 'none',
+    films: ['https://swapi.dev/api/films/1/', 'https://swapi.dev/api/films/2/', 'https://swapi.dev/api/films/3/']
   },
   {
     name: 'Leia Organa',
     height: '150',
     mass: '49',
     birth_year: '19BBY',
-    url: 'https://swapi.dev/api/people/5/'
+    url: 'https://swapi.dev/api/people/5/',
+    gender: 'female',
+    eye_color: 'brown',
+    hair_color: 'brown',
+    films: ['https://swapi.dev/api/films/1/', 'https://swapi.dev/api/films/2/', 'https://swapi.dev/api/films/3/']
   }
 ];
 
