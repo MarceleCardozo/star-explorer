@@ -1,6 +1,8 @@
 import charactersReducer, {
+  clearPagesCache,
   clearSearchQuery,
   fetchCharactersThunk,
+  loadPageFromCache,
   setSearchQuery
 } from '../charactersSlice';
 
@@ -36,7 +38,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: ''
+        searchQuery: '',
+        pages: {}
       };
 
       const nextState = charactersReducer(
@@ -56,7 +59,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: 'Luke'
+        searchQuery: 'Luke',
+        pages: {}
       };
 
       const nextState = charactersReducer(
@@ -65,6 +69,71 @@ describe('charactersSlice', () => {
       );
 
       expect(nextState.searchQuery).toBe('');
+    });
+
+    it('deve carregar página do cache', () => {
+      const initialState = {
+        characters: [],
+        loading: false,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: '',
+        pages: {
+          '2-': {
+            characters: [{
+              name: 'C-3PO',
+              height: '167',
+              mass: '75',
+              birth_year: '112BBY',
+              url: 'https://swapi.dev/api/people/2/',
+              gender: 'n/a',
+              eye_color: 'yellow',
+              hair_color: 'n/a',
+              films: ['https://swapi.dev/api/films/1/']
+            }],
+            nextPage: 'https://swapi.tech/api/people?page=3',
+            prevPage: 'https://swapi.tech/api/people?page=1'
+          }
+        }
+      };
+
+      const nextState = charactersReducer(
+        initialState,
+        loadPageFromCache({ page: 2, query: '' })
+      );
+
+      expect(nextState.currentPage).toBe(2);
+      expect(nextState.characters).toHaveLength(1);
+      expect(nextState.characters[0].name).toBe('C-3PO');
+      expect(nextState.nextPage).toBe('https://swapi.tech/api/people?page=3');
+      expect(nextState.prevPage).toBe('https://swapi.tech/api/people?page=1');
+    });
+
+    it('deve limpar o cache de páginas', () => {
+      const initialState = {
+        characters: [],
+        loading: false,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: '',
+        pages: {
+          '1-': { characters: [], nextPage: null, prevPage: null },
+          '2-': { characters: [], nextPage: null, prevPage: null }
+        }
+      };
+
+      const nextState = charactersReducer(
+        initialState,
+        clearPagesCache()
+      );
+
+      expect(nextState.pages).toEqual({});
     });
   });
 
@@ -78,7 +147,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: ''
+        searchQuery: '',
+        pages: {}
       };
 
       const action = { type: fetchCharactersThunk.pending.type };
@@ -107,7 +177,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: ''
+        searchQuery: '',
+        pages: {}
       };
 
       const action = { type: fetchCharactersThunk.pending.type };
@@ -127,7 +198,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: ''
+        searchQuery: '',
+        pages: {}
       };
 
       const mockCharacters = [
@@ -151,7 +223,7 @@ describe('charactersSlice', () => {
           next: 'https://swapi.tech/api/people?page=2',
           previous: null
         },
-        meta: { arg: { page: 1 } }
+        meta: { arg: { page: 1, query: '' } }
       };
 
       const nextState = charactersReducer(initialState, action);
@@ -162,6 +234,12 @@ describe('charactersSlice', () => {
       expect(nextState.nextPage).toBe('https://swapi.tech/api/people?page=2');
       expect(nextState.prevPage).toBe(null);
       expect(nextState.error).toBe(null);
+      
+      expect(nextState.pages['1-']).toEqual({
+        characters: mockCharacters,
+        nextPage: 'https://swapi.tech/api/people?page=2',
+        prevPage: null
+      });
     });
 
     it('deve definir o erro quando fetchCharactersThunk.rejected é disparado', () => {
@@ -173,7 +251,8 @@ describe('charactersSlice', () => {
         nextPage: null,
         prevPage: null,
         currentPage: 1,
-        searchQuery: ''
+        searchQuery: '',
+        pages: {}
       };
 
       const action = {
