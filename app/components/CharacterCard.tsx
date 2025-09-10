@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import tw from '../utils/tailwind';
 
 interface CharacterCardProps {
   name: string;
@@ -11,56 +12,19 @@ interface CharacterCardProps {
 
 const CharacterCard: React.FC<CharacterCardProps> = ({ name, height, mass, birthYear, onPress }) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <Text style={styles.name}>{name}</Text>
-      <View style={styles.infoContainer}>
-        <Text style={styles.info}>Altura: {height} cm</Text>
-        <Text style={styles.info}>Peso: {mass} kg</Text>
-        <Text style={styles.info}>Nascimento: {birthYear}</Text>
+    <TouchableOpacity style={tw`bg-gray-800 rounded-lg p-4 my-2 mx-4 shadow-md`} onPress={onPress} activeOpacity={0.7}>
+      <Text style={tw`text-lg font-bold text-yellow-400 mb-2`}>{name}</Text>
+      <View style={tw`gap-1 mb-3`}>
+        <Text style={tw`text-sm text-gray-200`}>Altura: {height} cm</Text>
+        <Text style={tw`text-sm text-gray-200`}>Peso: {mass} kg</Text>
+        <Text style={tw`text-sm text-gray-200`}>Nascimento: {birthYear}</Text>
       </View>
-      <View style={styles.viewMoreContainer}>
-        <Text style={styles.viewMoreText}>Toque para mais detalhes</Text>
+      <View style={tw`border-t border-gray-700 pt-2 mt-1 items-center`}>
+        <Text style={tw`text-xs text-gray-400 italic`}>Toque para mais detalhes</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#1F2937',
-    borderRadius: 8,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-    elevation: 2,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFE81F',
-    marginBottom: 8,
-  },
-  infoContainer: {
-    gap: 4,
-    marginBottom: 12,
-  },
-  info: {
-    fontSize: 14,
-    color: '#E5E7EB',
-  },
-  viewMoreContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#374151',
-    paddingTop: 8,
-    marginTop: 4,
-    alignItems: 'center',
-  },
-  viewMoreText: {
-    fontSize: 12,
-    color: '#94A3B8',
-    fontStyle: 'italic',
-  },
-});
 
 export default CharacterCard;
