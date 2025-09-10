@@ -57,20 +57,21 @@ const CharacterList: React.FC = () => {
   const renderSearchBar = () => (
     <View>
       <View style={tw`flex-row p-3 bg-slate-800 border-b border-slate-700 items-center`}>
-        <TextInput
-          style={tw`flex-1 h-10 bg-slate-900 rounded-lg px-3 text-gray-200 mr-2`}
-          placeholder="Buscar personagem por nome..."
-          placeholderTextColor="#94A3B8"
-          value={searchQuery}
-          onChangeText={(text) => dispatch(setSearchQuery(text))}
-          onSubmitEditing={handleSearch}
-          returnKeyType="search"
-        />
-        {searchQuery ? (
-          <TouchableOpacity style={tw`absolute right-[70px] top-[22px] z-10`} onPress={handleClearSearch}>
-            <Text style={tw`text-gray-400 text-base font-bold`}>✕</Text>
-          </TouchableOpacity>
-        ) : null}
+        <View style={tw`relative flex-1 mr-3`}>
+          <TextInput
+            style={tw`h-10 bg-slate-900 rounded-lg px-3 text-gray-200 pr-8`}
+            placeholder="Digite para buscar personagem..."
+            placeholderTextColor="#94A3B8"
+            value={searchQuery}
+            onChangeText={(text) => dispatch(setSearchQuery(text))}
+            returnKeyType="search"
+          />
+          {searchQuery ? (
+             <TouchableOpacity style={tw`absolute right-2 top-0 bottom-0 justify-center z-10`} onPress={handleClearSearch}>
+               <Text style={tw`text-gray-400 text-base font-bold`}>✕</Text>
+             </TouchableOpacity>
+           ) : null}
+        </View>
         <TouchableOpacity style={tw`bg-yellow-400 px-4 py-2.5 rounded-lg flex-row items-center justify-center shadow-md`} onPress={handleSearch}>
           <Text style={tw`text-black font-bold text-[15px]`}>Buscar</Text>
         </TouchableOpacity>
