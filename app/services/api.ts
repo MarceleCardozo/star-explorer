@@ -39,14 +39,48 @@ const BASE_URL = 'https://swapi.tech/api';
 export const fetchCharacters = async (page: number = 1, searchQuery: string = ''): Promise<ApiResponse> => {
   try {
     let url = `${BASE_URL}/people`;
+    const params = new URLSearchParams();
+    
     if (page > 1) {
-      url = `${BASE_URL}/people?page=${page}&limit=10`;
+      params.append('page', page.toString());
+      params.append('limit', '10');
     }
+    
     if (searchQuery) {
-      url = `${BASE_URL}/people/?search=${encodeURIComponent(searchQuery)}&page=${page}`;
+      params.append('name', searchQuery);
+      if (page > 1) {
+        params.append('page', page.toString());
+      }
+    }
+    
+    if (params.toString()) {
+      url += `?${params.toString()}`;
     }
     
     const response = await axios.get(url);
+
+    if (searchQuery && response.data.result && Array.isArray(response.data.result)) {
+      const searchResults = response.data.result;
+      
+      const apiResponse: ApiResponse = {
+        count: searchResults.length,
+        next: null,
+        previous: null,
+        results: searchResults.map((item: any) => ({
+          name: item.properties.name,
+          height: item.properties.height || 'Desconhecido',
+          mass: item.properties.mass || 'Desconhecido',
+          birth_year: item.properties.birth_year || 'Desconhecido',
+          url: item.properties.url,
+          gender: item.properties.gender || 'Desconhecido',
+          eye_color: item.properties.eye_color || 'Desconhecido',
+          hair_color: item.properties.hair_color || 'Desconhecido',
+          films: item.properties.films || []
+        }))
+      };
+      
+      return apiResponse;
+    }
 
     const swapiData: SwapiResponse = response.data;
     
