@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { clearSearchQuery, fetchCharactersThunk, setSearchQuery } from '../redux/slices/charactersSlice';
+import { clearSearchQuery, fetchCharactersThunk, loadPageFromCache, setSearchQuery } from '../redux/slices/charactersSlice';
 import { Character, getPageNumberFromUrl } from '../services/api';
 import tw from '../utils/tailwind';
 import CharacterCard from './CharacterCard';
@@ -19,7 +19,8 @@ const CharacterList: React.FC = () => {
     nextPage, 
     prevPage, 
     currentPage, 
-    searchQuery 
+    searchQuery,
+    pages 
   } = useAppSelector(state => state.characters);
   const usingFallbackData = error !== null && characters.length > 0;
 
@@ -34,14 +35,26 @@ const CharacterList: React.FC = () => {
   const handleNextPage = () => {
     if (nextPage) {
       const nextPageNumber = getPageNumberFromUrl(nextPage);
-      dispatch(fetchCharactersThunk({ page: nextPageNumber, query: searchQuery }));
+      const pageKey = `${nextPageNumber}-${searchQuery}`;
+      
+      if (pages[pageKey]) {
+        dispatch(loadPageFromCache({ page: nextPageNumber, query: searchQuery }));
+      } else {
+        dispatch(fetchCharactersThunk({ page: nextPageNumber, query: searchQuery }));
+      }
     }
   };
 
   const handlePrevPage = () => {
     if (prevPage) {
       const prevPageNumber = getPageNumberFromUrl(prevPage);
-      dispatch(fetchCharactersThunk({ page: prevPageNumber, query: searchQuery }));
+      const pageKey = `${prevPageNumber}-${searchQuery}`;
+      
+      if (pages[pageKey]) {
+        dispatch(loadPageFromCache({ page: prevPageNumber, query: searchQuery }));
+      } else {
+        dispatch(fetchCharactersThunk({ page: prevPageNumber, query: searchQuery }));
+      }
     }
   };
   
