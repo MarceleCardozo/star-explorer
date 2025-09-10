@@ -6,6 +6,7 @@ import { Character, getPageNumberFromUrl } from '../services/api';
 import tw from '../utils/tailwind';
 import CharacterCard from './CharacterCard';
 import CharacterModal from './CharacterModal';
+import StarField from './StarField';
 
 const CharacterList: React.FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
@@ -69,7 +70,7 @@ const CharacterList: React.FC = () => {
 
   const renderSearchBar = () => (
     <View>
-      <View style={tw`flex-row p-3 bg-slate-800 border-b border-slate-700 items-center`}>
+      <View style={tw`flex-row p-3 bg-slate-800/90 border-b border-slate-700 items-center`}>
         <View style={tw`relative flex-1 mr-3`}>
           <TextInput
             style={tw`h-10 bg-slate-900 rounded-lg px-3 text-gray-200 pr-8`}
@@ -118,7 +119,7 @@ const CharacterList: React.FC = () => {
   const OfflineBanner = () => {
     if (usingFallbackData) {
       return (
-        <View style={tw`bg-gray-600 py-2.5 px-4 flex-row justify-between items-center border-b border-gray-500`}>
+        <View style={tw`bg-gray-600/90 py-2.5 px-4 flex-row justify-between items-center border-b border-gray-500`}>
           <Text style={tw`text-yellow-400 text-sm flex-1 font-medium`}>{error}</Text>
           <TouchableOpacity 
             style={tw`bg-yellow-400 py-2 px-4 rounded-md ml-2 shadow-sm`} 
@@ -134,6 +135,7 @@ const CharacterList: React.FC = () => {
 
   return (
     <View style={tw`flex-1 bg-slate-900`}>
+      <StarField />
       <OfflineBanner />
       {renderSearchBar()}
       
@@ -167,7 +169,7 @@ const CharacterList: React.FC = () => {
         onClose={() => setModalVisible(false)}
       />
 
-      <View style={tw`flex-row justify-between items-center py-4 px-4 bg-slate-800`}>
+      <View style={tw`flex-row justify-between items-center py-4 px-4 bg-slate-800/90`}>
         <TouchableOpacity 
           style={tw`${(!prevPage || usingFallbackData || pageLoading) ? 'bg-gray-600 opacity-50' : 'bg-yellow-400'} py-2.5 px-4 rounded-lg`} 
           onPress={handlePrevPage}

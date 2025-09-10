@@ -12,7 +12,7 @@ interface CharacterCardProps {
 
 const CharacterCard: React.FC<CharacterCardProps> = ({ name, height, mass, birthYear, onPress }) => {
   return (
-    <TouchableOpacity style={tw`bg-gray-800 rounded-lg p-4 my-2 mx-4 shadow-md`} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={tw`bg-gray-800/80 rounded-lg p-4 my-2 mx-4 shadow-md`} onPress={onPress} activeOpacity={0.7}>
       <Text style={tw`text-lg font-bold text-yellow-400 mb-2`}>{name}</Text>
       <View style={tw`gap-1 mb-3`}>
         <Text style={tw`text-sm text-gray-200`}>Altura: {height} cm</Text>

@@ -37,7 +37,7 @@ const CharacterModal: React.FC<CharacterModalProps> = ({ isVisible, character, o
       onRequestClose={onClose}
     >
       <View style={tw`flex-1 justify-center items-center bg-black/70`}>
-        <View style={tw`w-[85%] max-h-[80%] bg-gray-800 rounded-xl p-5 items-center shadow-lg border border-yellow-400`}>
+        <View style={tw`w-[85%] max-h-[80%] bg-gray-800/85 rounded-xl p-5 items-center shadow-lg border border-yellow-400`}>
           <Text style={tw`text-2xl font-bold text-yellow-400 mb-4 text-center`}>{character.name}</Text>
           
           <ScrollView style={tw`w-full my-2.5`}>
