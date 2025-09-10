@@ -59,6 +59,12 @@ const FALLBACK_DATA: Character[] = [
   }
 ];
 
+interface PageData {
+  characters: Character[];
+  nextPage: string | null;
+  prevPage: string | null;
+}
+
 interface CharactersState {
   characters: Character[];
   loading: boolean;
@@ -68,6 +74,7 @@ interface CharactersState {
   prevPage: string | null;
   currentPage: number;
   searchQuery: string;
+  pages: Record<string, PageData>;
 }
 
 const initialState: CharactersState = {
@@ -79,6 +86,7 @@ const initialState: CharactersState = {
   prevPage: null,
   currentPage: 1,
   searchQuery: '',
+  pages: {},
 };
 
 export const fetchCharactersThunk = createAsyncThunk(
@@ -103,6 +111,21 @@ const charactersSlice = createSlice({
     clearSearchQuery: (state) => {
       state.searchQuery = '';
     },
+    loadPageFromCache: (state, action: PayloadAction<{ page: number; query: string }>) => {
+      const { page, query } = action.payload;
+      const pageKey = `${page}-${query}`;
+      const cachedPage = state.pages[pageKey];
+      
+      if (cachedPage) {
+        state.characters = cachedPage.characters;
+        state.nextPage = cachedPage.nextPage;
+        state.prevPage = cachedPage.prevPage;
+        state.currentPage = page;
+      }
+    },
+    clearPagesCache: (state) => {
+      state.pages = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -121,6 +144,14 @@ const charactersSlice = createSlice({
         state.nextPage = action.payload.next;
         state.prevPage = action.payload.previous;
         state.currentPage = action.meta.arg.page;
+        
+        const { page, query } = action.meta.arg;
+        const pageKey = `${page}-${query}`;
+        state.pages[pageKey] = {
+          characters: action.payload.results,
+          nextPage: action.payload.next,
+          prevPage: action.payload.previous,
+        };
       })
       .addCase(fetchCharactersThunk.rejected, (state, action) => {
         state.loading = false;
@@ -133,5 +164,5 @@ const charactersSlice = createSlice({
   },
 });
 
-export const { setSearchQuery, clearSearchQuery } = charactersSlice.actions;
+export const { setSearchQuery, clearSearchQuery, loadPageFromCache, clearPagesCache } = charactersSlice.actions;
 export default charactersSlice.reducer;
