@@ -1,41 +1,16 @@
-import { Text, View, StyleSheet, SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import CharacterList from "./components/CharacterList";
+import tw from "./utils/tailwind";
 
 export default function Index() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={tw`flex-1 bg-slate-900`}>
       <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
-      <View style={styles.header}>
-        <Text style={styles.title}>Star Explorer</Text>
-        <Text style={styles.subtitle}>Personagens de Star Wars</Text>
+      <View style={tw`p-4 bg-slate-800 border-b border-slate-600 mt-4`}>
+        <Text style={tw`text-2xl font-bold text-yellow-400 text-center`}>Star Explorer</Text>
+        <Text style={tw`text-base text-gray-200 text-center mt-1`}>Personagens de Star Wars</Text>
       </View>
       <CharacterList />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0F172A',
-  },
-  header: {
-    padding: 16,
-    backgroundColor: '#1E293B',
-    borderBottomWidth: 1,
-    borderBottomColor: '#334155',
-    marginTop: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFE81F',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#E5E7EB',
-    textAlign: 'center',
-    marginTop: 4,
-  },
-});
