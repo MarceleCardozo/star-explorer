@@ -1,0 +1,41 @@
+# EAS Build ignore file
+# Exclude problematic directories and files
+
+# Development files
+.vscode/
+.git/
+.expo/
+node_modules/
+
+# Build artifacts
+dist/
+web-build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local env files
+.env*.local
+
+# Coverage reports
+coverage/
+
+# Example files
+app-example/
+
+# Android build files that might cause permission issues
+android/build/
+android/.gradle/
+android/app/build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
