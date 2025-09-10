@@ -29,7 +29,7 @@ jest.mock('../../../services/api', () => ({
 
 describe('charactersSlice', () => {
   describe('reducers', () => {
-    it('deve definir o termo de busca', () => {
+    it('should set search query', () => {
       const initialState = {
         characters: [],
         loading: false,
@@ -50,7 +50,7 @@ describe('charactersSlice', () => {
       expect(nextState.searchQuery).toBe('Luke');
     });
 
-    it('deve limpar o termo de busca', () => {
+    it('should clear search query', () => {
       const initialState = {
         characters: [],
         loading: false,
@@ -71,7 +71,7 @@ describe('charactersSlice', () => {
       expect(nextState.searchQuery).toBe('');
     });
 
-    it('deve carregar página do cache', () => {
+    it('should load page from cache', () => {
       const initialState = {
         characters: [],
         loading: false,
@@ -112,7 +112,7 @@ describe('charactersSlice', () => {
       expect(nextState.prevPage).toBe('https://swapi.tech/api/people?page=1');
     });
 
-    it('deve limpar o cache de páginas', () => {
+    it('should clear pages cache', () => {
       const initialState = {
         characters: [],
         loading: false,
@@ -138,7 +138,7 @@ describe('charactersSlice', () => {
   });
 
   describe('extraReducers', () => {
-    it('deve definir loading como true quando fetchCharactersThunk.pending é disparado', () => {
+    it('should set loading to true when fetchCharactersThunk.pending is dispatched', () => {
       const initialState = {
         characters: [],
         loading: false,
@@ -189,7 +189,7 @@ describe('charactersSlice', () => {
       expect(nextState.error).toBe(null);
     });
 
-    it('deve atualizar o estado com os dados quando fetchCharactersThunk.fulfilled é disparado', () => {
+    it('should update state with data when fetchCharactersThunk.fulfilled is dispatched', () => {
       const initialState = {
         characters: [],
         loading: true,
@@ -242,7 +242,7 @@ describe('charactersSlice', () => {
       });
     });
 
-    it('deve definir o erro quando fetchCharactersThunk.rejected é disparado', () => {
+    it('should set error when fetchCharactersThunk.rejected is dispatched', () => {
       const initialState = {
         characters: [],
         loading: true,
@@ -267,7 +267,7 @@ describe('charactersSlice', () => {
       expect(nextState.error).toBe('Erro ao buscar personagens');
     });
 
-    it('deve atualizar currentPage quando fetchCharactersThunk.fulfilled é disparado', () => {
+    it('should update currentPage when fetchCharactersThunk.fulfilled is dispatched', () => {
       const initialState = {
         characters: [],
         loading: true,
@@ -295,7 +295,7 @@ describe('charactersSlice', () => {
       expect(nextState.currentPage).toBe(3);
     });
 
-    it('deve salvar dados no cache com query quando fetchCharactersThunk.fulfilled é disparado', () => {
+    it('should save data to cache with query when fetchCharactersThunk.fulfilled is dispatched', () => {
       const initialState = {
         characters: [],
         loading: true,
@@ -339,7 +339,7 @@ describe('charactersSlice', () => {
       });
     });
 
-    it('deve lidar com erro sem payload', () => {
+    it('should handle error without payload', () => {
       const initialState = {
         characters: [],
         loading: true,
@@ -367,7 +367,7 @@ describe('charactersSlice', () => {
   });
 
   describe('edge cases', () => {
-    it('deve manter o estado quando loadPageFromCache é chamado com página inexistente', () => {
+    it('should maintain state when loadPageFromCache is called with non-existent page', () => {
       const initialState = {
         characters: [{
           name: 'Existing Character',
@@ -398,7 +398,7 @@ describe('charactersSlice', () => {
       expect(nextState).toEqual(initialState);
     });
 
-    it('deve manter searchQuery quando setSearchQuery é chamado com string vazia', () => {
+    it('should maintain searchQuery when setSearchQuery is called with empty string', () => {
       const initialState = {
         characters: [],
         loading: false,

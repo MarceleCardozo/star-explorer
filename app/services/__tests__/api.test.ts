@@ -10,7 +10,7 @@ describe('API Service', () => {
   });
 
   describe('fetchCharacters', () => {
-    it('deve buscar personagens com sucesso', async () => {
+    it('should fetch characters successfully', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
@@ -79,7 +79,7 @@ describe('API Service', () => {
       });
     });
 
-    it('deve buscar personagens com termo de busca', async () => {
+    it('should fetch characters with search term', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
@@ -126,7 +126,7 @@ describe('API Service', () => {
       expect(result.results[0].name).toBe('Luke Skywalker');
     });
 
-    it('deve lidar com erros ao buscar detalhes do personagem', async () => {
+    it('should handle errors when fetching character details', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
@@ -162,7 +162,7 @@ describe('API Service', () => {
       });
     });
 
-    it('deve lançar erro quando a API principal falha', async () => {
+    it('should throw error when main API fails', async () => {
       mockedAxios.get.mockRejectedValueOnce(new Error('API Error'));
 
       await expect(fetchCharacters()).rejects.toThrow();
@@ -170,39 +170,39 @@ describe('API Service', () => {
   });
 
   describe('getPageNumberFromUrl', () => {
-    it('deve extrair o número da página da URL', () => {
+    it('should extract page number from URL', () => {
       const url = 'https://swapi.tech/api/people?page=3&limit=10';
       expect(getPageNumberFromUrl(url)).toBe(3);
     });
 
-    it('deve retornar 1 quando a URL não contém número de página', () => {
+    it('should return 1 when URL does not contain page number', () => {
       const url = 'https://swapi.tech/api/people';
       expect(getPageNumberFromUrl(url)).toBe(1);
     });
 
-    it('deve retornar 1 quando a URL é null', () => {
+    it('should return 1 when URL is null', () => {
       expect(getPageNumberFromUrl(null)).toBe(1);
     });
 
-    it('deve retornar 1 quando a URL é undefined', () => {
+    it('should return 1 when URL is undefined', () => {
       expect(getPageNumberFromUrl(undefined as any)).toBe(1);
     });
 
-    it('deve extrair página de URLs com diferentes formatos', () => {
+    it('should extract page from URLs with different formats', () => {
       expect(getPageNumberFromUrl('https://swapi.tech/api/people?page=5')).toBe(5);
       expect(getPageNumberFromUrl('https://swapi.tech/api/people?page=10&limit=10')).toBe(10);
       expect(getPageNumberFromUrl('https://swapi.tech/api/people?name=luke&page=3')).toBe(3);
     });
 
-    it('deve retornar 1 para URLs malformadas', () => {
+    it('should return 1 for malformed URLs', () => {
       expect(getPageNumberFromUrl('invalid-url')).toBe(1);
       expect(getPageNumberFromUrl('https://swapi.tech/api/people?page=abc')).toBe(1);
       expect(getPageNumberFromUrl('https://swapi.tech/api/people?page=')).toBe(1);
     });
   });
 
-  describe('fetchCharacters - casos adicionais', () => {
-    it('deve lidar com resposta vazia da API', async () => {
+  describe('fetchCharacters - additional cases', () => {
+    it('should handle empty API response', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
@@ -222,7 +222,7 @@ describe('API Service', () => {
       expect(result.previous).toBeNull();
     });
 
-    it('deve fazer requisição com parâmetros corretos para página específica', async () => {
+    it('should make request with correct parameters for specific page', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
@@ -241,7 +241,7 @@ describe('API Service', () => {
       );
     });
 
-    it('deve lidar com busca que retorna resultado direto', async () => {
+    it('should handle search that returns direct result', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           result: [
@@ -271,14 +271,14 @@ describe('API Service', () => {
       expect(result.results[0].name).toBe('Luke Skywalker');
     });
 
-    it('deve lidar com erro de rede', async () => {
+    it('should handle network error', async () => {
       const networkError = new Error('Network Error');
       mockedAxios.get.mockRejectedValueOnce(networkError);
 
       await expect(fetchCharacters()).rejects.toThrow('Network Error');
     });
 
-    it('deve lidar com timeout da requisição', async () => {
+    it('should handle request timeout', async () => {
       const timeoutError = new Error('timeout of 5000ms exceeded');
       timeoutError.name = 'TimeoutError';
       mockedAxios.get.mockRejectedValueOnce(timeoutError);
@@ -286,7 +286,7 @@ describe('API Service', () => {
       await expect(fetchCharacters()).rejects.toThrow('timeout of 5000ms exceeded');
     });
 
-    it('deve processar corretamente personagens com dados parciais', async () => {
+    it('should correctly process characters with partial data', async () => {
       mockedAxios.get.mockResolvedValueOnce({
         data: {
           message: 'ok',
