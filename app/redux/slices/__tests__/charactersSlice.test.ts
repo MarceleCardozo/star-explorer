@@ -266,5 +266,157 @@ describe('charactersSlice', () => {
       expect(nextState.pageLoading).toBe(false);
       expect(nextState.error).toBe('Erro ao buscar personagens');
     });
+
+    it('deve atualizar currentPage quando fetchCharactersThunk.fulfilled é disparado', () => {
+      const initialState = {
+        characters: [],
+        loading: true,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: '',
+        pages: {}
+      };
+
+      const action = {
+        type: fetchCharactersThunk.fulfilled.type,
+        payload: {
+          results: [],
+          next: null,
+          previous: null
+        },
+        meta: { arg: { page: 3, query: 'test' } }
+      };
+
+      const nextState = charactersReducer(initialState, action);
+
+      expect(nextState.currentPage).toBe(3);
+    });
+
+    it('deve salvar dados no cache com query quando fetchCharactersThunk.fulfilled é disparado', () => {
+      const initialState = {
+        characters: [],
+        loading: true,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: 'luke',
+        pages: {}
+      };
+
+      const mockCharacters = [{
+        name: 'Luke Skywalker',
+        height: '172',
+        mass: '77',
+        birth_year: '19BBY',
+        url: 'https://swapi.dev/api/people/1/',
+        gender: 'male',
+        eye_color: 'blue',
+        hair_color: 'blond',
+        films: ['https://swapi.dev/api/films/1/']
+      }];
+
+      const action = {
+        type: fetchCharactersThunk.fulfilled.type,
+        payload: {
+          results: mockCharacters,
+          next: null,
+          previous: null
+        },
+        meta: { arg: { page: 1, query: 'luke' } }
+      };
+
+      const nextState = charactersReducer(initialState, action);
+
+      expect(nextState.pages['1-luke']).toEqual({
+        characters: mockCharacters,
+        nextPage: null,
+        prevPage: null
+      });
+    });
+
+    it('deve lidar com erro sem payload', () => {
+      const initialState = {
+        characters: [],
+        loading: true,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: '',
+        pages: {}
+      };
+
+      const action = {
+        type: fetchCharactersThunk.rejected.type,
+        error: { message: 'Network Error' },
+        payload: undefined
+      };
+
+      const nextState = charactersReducer(initialState, action);
+
+      expect(nextState.loading).toBe(false);
+      expect(nextState.pageLoading).toBe(false);
+      expect(nextState.error).toBe('Erro ao buscar personagens');
+    });
+  });
+
+  describe('edge cases', () => {
+    it('deve manter o estado quando loadPageFromCache é chamado com página inexistente', () => {
+      const initialState = {
+        characters: [{
+          name: 'Existing Character',
+          height: '180',
+          mass: '80',
+          birth_year: '20BBY',
+          url: 'https://swapi.dev/api/people/999/',
+          gender: 'male',
+          eye_color: 'brown',
+          hair_color: 'black',
+          films: []
+        }],
+        loading: false,
+        pageLoading: false,
+        error: null,
+        nextPage: 'https://swapi.tech/api/people?page=2',
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: '',
+        pages: {}
+      };
+
+      const nextState = charactersReducer(
+        initialState,
+        loadPageFromCache({ page: 5, query: '' })
+      );
+
+      expect(nextState).toEqual(initialState);
+    });
+
+    it('deve manter searchQuery quando setSearchQuery é chamado com string vazia', () => {
+      const initialState = {
+        characters: [],
+        loading: false,
+        pageLoading: false,
+        error: null,
+        nextPage: null,
+        prevPage: null,
+        currentPage: 1,
+        searchQuery: 'previous search',
+        pages: {}
+      };
+
+      const nextState = charactersReducer(
+        initialState,
+        setSearchQuery('')
+      );
+
+      expect(nextState.searchQuery).toBe('');
+    });
   });
 });
