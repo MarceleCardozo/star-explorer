@@ -1,50 +1,108 @@
-# Welcome to your Expo app 👋
+# Star Explorer 🌟
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Um aplicativo React Native desenvolvido com Expo para explorar personagens do universo Star Wars. Este projeto utiliza a API SWAPI (Star Wars API) para buscar e exibir informações detalhadas sobre personagens, filmes e muito mais.
 
-## Get started
+## 📋 Pré-requisitos
 
-1. Install dependencies
+Antes de começar, certifique-se de ter instalado em sua máquina:
 
-   ```bash
-   npm install
-   ```
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/) (opcional, mas recomendado)
+- Para desenvolvimento mobile:
+  - [Android Studio](https://developer.android.com/studio) (para Android)
+  - [Xcode](https://developer.apple.com/xcode/) (para iOS - apenas macOS)
+  - Ou o aplicativo [Expo Go](https://expo.dev/go) no seu dispositivo móvel
 
-2. Start the app
+## 🚀 Instalação e Configuração
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Clone o repositório
 ```bash
-npm run reset-project
+git clone <url-do-repositorio>
+cd star-explorer
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Instale as dependências
+```bash
+npm install
+```
 
-## Learn more
+### 3. Inicie o servidor de desenvolvimento
+```bash
+npm start
+# ou
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## 📱 Executando o Aplicativo
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Após iniciar o servidor de desenvolvimento, você verá um QR code no terminal. Você pode executar o app de várias formas:
 
-## Join the community
+### Opção 1: Expo Go (Mais Rápido)
+1. Instale o [Expo Go](https://expo.dev/go) no seu dispositivo móvel
+2. Escaneie o QR code com a câmera (iOS) ou com o próprio Expo Go (Android)
 
-Join our community of developers creating universal apps.
+### Opção 2: Emuladores/Simuladores
+```bash
+# Para Android (requer Android Studio configurado)
+npm run android
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Para iOS (requer Xcode - apenas macOS)
+npm run ios
+
+# Para Web
+npm run web
+```
+
+## 🛠️ Scripts Disponíveis
+
+- `npm start` - Inicia o servidor de desenvolvimento Expo
+- `npm run android` - Executa no emulador Android
+- `npm run ios` - Executa no simulador iOS
+- `npm run web` - Executa no navegador web
+- `npm run lint` - Executa o linter para verificar código
+- `npm test` - Executa os testes unitários
+
+## 🧪 Executando Testes
+
+```bash
+npm test
+```
+
+## 🏗️ Tecnologias Utilizadas
+
+- **React Native** - Framework para desenvolvimento mobile
+- **Expo** - Plataforma para desenvolvimento React Native
+- **TypeScript** - Superset JavaScript com tipagem estática
+- **Redux Toolkit** - Gerenciamento de estado
+- **Axios** - Cliente HTTP para requisições à API
+- **Tailwind CSS (twrnc)** - Estilização utilitária
+- **Jest** - Framework de testes
+- **React Navigation** - Navegação entre telas
+
+## 📁 Estrutura do Projeto
+
+```
+app/
+├── components/          # Componentes reutilizáveis
+├── redux/              # Configuração Redux (store, slices)
+├── screens/            # Telas da aplicação
+├── services/           # Serviços de API
+└── utils/              # Utilitários e helpers
+```
+
+## 🔧 Configuração de Desenvolvimento
+
+O projeto está configurado com:
+- **ESLint** para análise de código
+- **TypeScript** para tipagem
+- **Jest** para testes unitários
+- **Expo Router** para navegação baseada em arquivos
+
+## 📖 Funcionalidades
+
+- 🔍 Busca de personagens Star Wars
+- 📋 Lista de personagens com informações detalhadas
+- 🎬 Visualização de filmes relacionados
+- 📱 Interface responsiva e moderna
+- ⭐ Animações e efeitos visuais
